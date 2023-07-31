@@ -1,25 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-const Card = () => {
-    return (
-            <div class = "card-wrapper mr-5">
-                <div class = "card-top" style= {{"background-color": "chartreuse"}}></div>
-                <div class = "task-holder" >
-                    <span class = "card-header" style={{"background-color": "#F2FAF1"}}></span>
-                    <p>Learn react</p>
+const EditTask = ({ modal, toggle, task, updateTask }) => {
+  const [editedTask, setEditedTask] = useState(task);
 
-                    <div style={{"position": "absolute", "right": "20px", "bottom": "20px"}}>
-                        <li class = "far fa-edit" style={{"color" : "#5DC250"}}></li>
-                        <li class="fas fa-trash-alt" style = {{"color": "#5DC250"}}></li>
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedTask({
+      ...editedTask,
+      [name]: value,
+    });
+  };
 
-                    </div>
-                
+  const handleUpdate = () => {
+    // Call the updateTask prop to update the task with the editedTask object
+    updateTask(editedTask);
+    // Close the modal after handling the update operation.
+    toggle();
+  };
 
-                </div>
-
+  return (
+    <div>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Edit Task</ModalHeader>
+        <ModalBody>
+          <form>
+            <div className="form-group">
+              <label>Task Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={editedTask.Name}
+                onChange={handleChange}
+                name="Name"
+              />
             </div>
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                rows="5"
+                className="form-control"
+                value={editedTask.Description}
+                onChange={handleChange}
+                name="Description"
+              ></textarea>
+            </div>
+          </form>
+        </ModalBody>
+        <ModalFooter>
+          {/* Modify the Update button onClick to call handleUpdate */}
+          <Button color="primary" onClick={handleUpdate}>
+            Update
+          </Button>
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
 
-
-    )
-} 
-export default Card;
+export default EditTask;

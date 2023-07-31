@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-const CreateTaskPopup = ({ modal, toggle, saveTask }) => {
-  const [taskName, setTaskName] = useState('');
-  const [description, setDescription] = useState('');
+const EditTaskPopup = ({ modal, toggle, task, updateTask }) => {
+  const [taskName, setTaskName] = useState(task.Name);
+  const [description, setDescription] = useState(task.Description);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,23 +15,24 @@ const CreateTaskPopup = ({ modal, toggle, saveTask }) => {
     }
   };
 
-  const handleSave = () => {
-    const taskObj = {
+  const handleUpdate = () => {
+    const editedTask = {
+      ...task,
       Name: taskName,
       Description: description,
     };
 
-    // Call the saveTask prop to save the new task in the TodoList component
-    saveTask(taskObj);
+    // Call the updateTask prop to update the task in the TodoList component
+    updateTask(editedTask);
 
-    // Close the modal after handling the save operation.
+    // Close the modal after handling the update operation.
     toggle();
   };
 
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Create Task</ModalHeader>
+        <ModalHeader toggle={toggle}>Edit Task</ModalHeader>
         <ModalBody>
           <form>
             <div className="form-group">
@@ -51,15 +52,15 @@ const CreateTaskPopup = ({ modal, toggle, saveTask }) => {
                 className="form-control"
                 value={description}
                 onChange={handleChange}
-                Description="description"
+                name="description" {/* Fix this attribute */}
               ></textarea>
             </div>
           </form>
         </ModalBody>
         <ModalFooter>
-          {/* Modify the Create button onClick to call handleSave */}
-          <Button color="primary" onClick={handleSave}>
-            Create
+          {/* Modify the Update button onClick to call handleUpdate */}
+          <Button color="primary" onClick={handleUpdate}>
+            Update
           </Button>
           <Button color="secondary" onClick={toggle}>
             Cancel
@@ -70,5 +71,4 @@ const CreateTaskPopup = ({ modal, toggle, saveTask }) => {
   );
 };
 
-export default CreateTaskPopup;
-
+export default EditTaskPopup;
