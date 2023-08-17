@@ -8,10 +8,11 @@
 .card-header{
 margin-top: 10px;
 margin-bottom: 10px;
-max-width: 80px;
+max-width: 100px;
 height:30px;
 text-align: center;
 padding: 1px 1px !important;
+text-align: center;
 
 }
 .card-wrapper{

@@ -1,38 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const EditTaskPopup = ({ modal, toggle, task, updateTask }) => {
-  const [taskName, setTaskName] = useState(task.Name);
-  const [description, setDescription] = useState(task.Description);
+  const [taskName, setTaskName] = useState(task?.Name || '');
+  const [description, setDescription] = useState(task?.Description || '');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "taskName") {
+    if (name === 'taskName') {
       setTaskName(value);
-    } else {
+    } else if (name === 'description') {
       setDescription(value);
     }
   };
 
-  const handleUpdate = () => {
-    const editedTask = {
-      ...task,
-      Name: taskName,
-      Description: description,
-    };
+  const handleUpdate = (e) => {
+   e.preventDefault();
+   let tempObj = {}
+   tempObj['Name'] = taskName
+   tempObj['Description'] = description
+   updateTask(tempObj)
 
-    // Call the updateTask prop to update the task in the TodoList component
-    updateTask(editedTask);
-
-    // Close the modal after handling the update operation.
-    toggle();
   };
 
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Edit Task</ModalHeader>
+        <ModalHeader toggle={toggle}>Update Task</ModalHeader>
         <ModalBody>
           <form>
             <div className="form-group">
@@ -52,7 +47,7 @@ const EditTaskPopup = ({ modal, toggle, task, updateTask }) => {
                 className="form-control"
                 value={description}
                 onChange={handleChange}
-                name="description" {/* Fix this attribute */}
+                name="description"
               ></textarea>
             </div>
           </form>

@@ -1,64 +1,61 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import React, {useState} from 'react';
+import EditTaskPopup from '../modals/EditTask';
 
-const EditTask = ({ modal, toggle, task, updateTask }) => {
-  const [editedTask, setEditedTask] = useState(task);
+const Card = ({ taskObj, index, deleteTask , updateListArray}) => {
+  const [modal, setModal] = useState(false);
+  const colors = [
+    {
+      primaryColor : "#5D93E1",
+      secondaryColor : "#ECF3FC"
+    },
+    {
+      primaryColor: "#F9D288",
+      secondaryColor: "FEFAF1"
+    },
+    {
+      primaryColor: "#5DC250",
+      secondaryColor: "#F2FAF1"
+    },
+    {
+      primaryColor: "#F40607",
+      secondaryColor: "#FDF1F1"
+    },
+    {
+      primaryColor: "#B964F7",
+      secondaryColor: "#F3F0FD"
+    }
+    
+  ]
+  const toggle = () => {
+    setModal(!modal);
+  }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedTask({
-      ...editedTask,
-      [name]: value,
-    });
-  };
+  const updateTask = (obj) => {
+    updateListArray(obj, index)
 
-  const handleUpdate = () => {
-    // Call the updateTask prop to update the task with the editedTask object
-    updateTask(editedTask);
-    // Close the modal after handling the update operation.
-    toggle();
-  };
+  }
+
+  const handleDelete = () => {
+      deleteTask(index)
+  }
 
   return (
-    <div>
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Edit Task</ModalHeader>
-        <ModalBody>
-          <form>
-            <div className="form-group">
-              <label>Task Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={editedTask.Name}
-                onChange={handleChange}
-                name="Name"
-              />
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea
-                rows="5"
-                className="form-control"
-                value={editedTask.Description}
-                onChange={handleChange}
-                name="Description"
-              ></textarea>
-            </div>
-          </form>
-        </ModalBody>
-        <ModalFooter>
-          {/* Modify the Update button onClick to call handleUpdate */}
-          <Button color="primary" onClick={handleUpdate}>
-            Update
-          </Button>
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+    <div className='card-wrapper mr-5'>
+      <div className="card-top" style={{ "background-color": colors[index%5].primaryColor}}></div>
+      <div className="task-holder">
+        <span className="card-header" style={{ "background-color": colors[index%5].secondaryColor, "border-radius": "10px" }}>
+          {taskObj.Name}
+        </span>
+        <p className='mt-3'>{taskObj.Description}</p>
+
+        <div style={{ "position": "absolute", "right": "20px", "bottom": "20px" }}>
+          <i className="far fa-edit mr-3" style={{ "color": colors[index%5].primaryColor , "cursor": "pointer"}} onClick={() => setModal(true)}></i>
+          <i className="fas fa-trash-alt" style={{ "color": colors[index%5].primaryColor, "cursor": "pointer" }} onClick={handleDelete}></i>
+        </div>
+      </div>
+      <EditTaskPopup modal = {modal} toggle={toggle} updateTask={updateTask}/>
     </div>
   );
 };
 
-export default EditTask;
+export default Card;
